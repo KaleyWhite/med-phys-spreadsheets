@@ -68,7 +68,7 @@ The `BrachyTxs` table contains a hidden column for each physicist and MD. These 
 
 `AllPhysicists` and `AllMDs` are lists of valid physicist and MD initials, respectively. 
 
-The first row of `Validation` contains named ranges that call VBA functions that return whether a certain value in `BrachyTxs` is valid. The data validation in `BrachyTxs` uses this named range in its Data Validation. This workaround is necessary because Excel disallows VBA functions in Data Validation formulas. The first column of `ValidatePt` uses a function in the [`CustomValidation`](.\CustomValidation.xlam) add-in to verify that the `Pt` entry is either an MRN or a name in a certain format. The other two columns ensure that each physicist or MD in the comma-separated lists are present in the `AllPhysicists` or `AllMDs` table, respectively. 
+The first row of `Validation` contains named ranges that call VBA functions that return whether a certain value in `BrachyTxs` is valid. The data validation in `BrachyTxs` uses this named range in its Data Validation. This workaround is necessary because Excel disallows VBA functions in Data Validation formulas. The first column of `ValidatePt` uses a function in the [`CustomValidation`](./CustomValidation.xlam) add-in to verify that the `Pt` entry is either an MRN or a name in a certain format. The other two columns ensure that each physicist or MD in the comma-separated lists are present in the `AllPhysicists` or `AllMDs` table, respectively. 
 <hr>
 
 ### Contacts
@@ -126,9 +126,9 @@ We leave the patient with trash cans for trash and for linens. The nurses' trash
 
 The post-cleanup readings should be below the background "cutoff" taken before the patient arrived.
 ##### Dependencies
-- [`CustomValidation`](.\CustomValidation.xlsm) add-in
+- [`CustomValidation`](./CustomValidation.xlsm) add-in
 ##### Other Technical Details
-Entered data is validated using Excel Data Validation, radio buttons to constrain values to a predefined list, and my [`CustomValidation`](.\CustomValidation.xlsm) add-in. The hidden column `ValidatePt`is used by `CustomValidation`; see the Brachy Txs technical details for more details.
+Entered data is validated using Excel Data Validation, radio buttons to constrain values to a predefined list, and my [`CustomValidation`](./CustomValidation.xlsm) add-in. The hidden column `ValidatePt`is used by `CustomValidation`; see the Brachy Txs technical details for more details.
 
 `Date` must be a valid date. (Excel Data Validation requires a minimum date. This date has no significance and is just the date on which I set the Data Validation.)
 
@@ -301,11 +301,11 @@ The data can be used to answer myriad statistical questions, such as:
 - Are the shifts greater on Tomo than on Elekta, as we expect?
 - Does dose rescale actually increase any of the pass ratios?
 ##### Dependencies
-- [`CustomValidation`](.\CustomValidation.xlam) add-in
+- [`CustomValidation`](./CustomValidation.xlam) add-in
 ##### Other Technical Details
 There are two tables on the single worksheet in the XLSM file: `PSQAStats` and `Validation`. See the Brachy Txs Technical Details for an explanation of how the `Validation` table is used for data validation. 
 
-See the [Datasets for Datasets](https://arxiv.org/abs/1803.09010) [datasheet](.\PSQA Stats\datasheet.md) for more details, including the data dictionary.
+See the [Datasets for Datasets](https://arxiv.org/abs/1803.09010) [datasheet](./PSQA Stats/datasheet.md) for more details, including the data dictionary.
 <hr>
 
 #### SNC Alternatives Log
@@ -323,7 +323,7 @@ These functions are meant to be used in named ranges which can be used in Custom
 ##### Example
 Here is an example of implementing custom data validation using this add-in, named ranges, and Excel's built-in Data Validation.
 
-In my [Brachy Txs](.\Brachy Txs.xlsm) spreadsheet, each `Pt` value must be either an MRN or a patient name. The `CustomValidation` `ValidatePatient` performs this validation. To implement the validation, I:
+In my [Brachy Txs](./Brachy Txs.xlsm) spreadsheet, each `Pt` value must be either an MRN or a patient name. The `CustomValidation` `ValidatePatient` performs this validation. To implement the validation, I:
 1. Create a `Validation` table with a column `ValidatePt`.<br>
 <img src="./images_for_readme/CustomValidation/Validation_table.png" alt="Validation table"/><br>
 <img src="./images_for_readme/CustomValidation/Validation_table_name.jpg" alt="Validation table name"/>
