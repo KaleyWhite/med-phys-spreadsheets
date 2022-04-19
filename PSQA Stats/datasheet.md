@@ -2,7 +2,7 @@
 (template based on https://arxiv.org/abs/1803.09010)
 ## **1. Motivation**
 ### **1.1** For what purpose was the dataset created? Was there a specific task in mind? Was there a specific gap that needed to be filled? Please provide a description.
-The dataset was created according to recommendations from the American Association of Physicists in Medicine (AAPM) Task Group Report 218, which recommends statistical process control (SPC) and process capability analysis (PCA) of patient-specific IMRT QA. In addition to SPC and PCA, we collected the data in a general effort to be more data driven in our Cancer Center. The data is intended for replication of statistical work on PSQA as well as for discoveries to inform decisions and best practices in our department. The data come from PSQA plans run on our linear accelerators (linacs) using the Delta4 Phantom and its accompanying software. Gamma is global. We rescale each plan according to a scale factor (see "Composition" below) and then optimize the phantom position in the PSQA software.
+The dataset was created according to recommendations from the American Association of Physicists in Medicine (AAPM) Task Group Report 218, which recommends statistical process control (SPC) and process capability analysis (PCA) of patient-specific IMRT QA. In addition to SPC and PCA, we collected the data in a general effort to be more data driven in our Cancer Center. The data is intended for replication of statistical work on PSQA as well as for discoveries to inform decisions and best practices in our department. The data come from PSQA plans run on our linear accelerators (linacs) using the Delta4 Phantom+ and its accompanying software. Gamma is global. We rescale each plan according to a scale factor (see "Composition" below) and then optimize the phantom position in the PSQA software.
 ### **1.2**  Who created this dataset (e.g., which team, research group) and on behalf of which entity (e.g., company, institution, organization)?
 The dataset was created by Kaley White, Radiation Physicist Assistant at Cookeville Regional Medical Center (CRMC), with input from Zachary Carter, Chief Radiation Physicist at CRMC.
 ### **1.3**  Who funded the creation of the dataset? If there is an associated grant, please provide the name of the grantor and the grant name and number.
@@ -15,46 +15,50 @@ Each row in the "PSQAStats" table represents a run of a PSQA plan on a linac.
 ### **2.2**  How many instances are there in total (of each type, if appropriate)?
 At the time of compilation of this document, there are 248 instances.
 ### **2.3**  Does the dataset contain all possible instances or is it a sample (not necessarily random) of instances from a larger set? If the dataset is a sample, then what is the larger set? Is the sample representative of the larger set (e.g., geographic coverage)? If so, please describe how this representativeness was validated/verified. If it is not representative of the larger set, please describe why not (e.g., to cover a more diverse range of instances, because instances were withheld or unavailable).
-The dataset is a sample of PSQA plans run at CRMC over a certain time period. A run was excluded from the sample if (a) it was not run by Kaley, or (b) Kaley neglected to record certain essential fields (e.g., gamma pass ratio) for the plan. As far as the authors know, fewer than 10 runs were excluded. No tests were run to determine representativeness.
+The dataset is a sample of PSQA plans run at CRMC over a certain time period. A run was excluded from the sample if (a) it was not run by Kaley, (b) Kaley neglected to record certain essential fields (e.g., gamma pass ratio) for the plan, or (c) Kaley realized after the fact that she had recorded the wrong values. As far as the authors know, fewer than 10 runs were excluded. No tests were run to determine representativeness.
 ### **2.4**  What data does each instance consist of? "Raw" data (e.g., unprocessed text or images) or features? In either case, please provide a description.
 The table consists of the following fields:
 Column | Description | Constraints
 --- | --- | ---
 `Date` | The date on which the plan was run on the linac | Today or a past date
 `Machine` | The linac on which the plan was run | `Tomo` (a TomoTherapy Hi Art), `E1` (Synergy linac with Agility MLC), or `E2` (Infinity linac with Agility MLC)
-`Beam (Not Whole Plan)` | Whether or not the DQA was shot on a single beam from a multi-beam plan, not on the plan itself | `TRUE` or `FALSE`
+`Dose Type` | The type of dose that the DQA plan was shot for: the entire plan dose, or an individual beam dose in a multi-beam plan. Note that this document uses the terms _plan_ and _beam_ interchangeably to refer to a row in the table. | `Plan` or `Beam`
+`Dose Type Rescaled` | The dose that was rescaled. When a plan dose is rescaled, beam doses are unaffected and thus invalid for evaluating the DQA results. When beam doses are rescaled, the plan dose is recalculated as the sum of the rescaled beam doses. | For plan doses, `Plan` or `Beam`. For beam doses, `Beam`.
 `D4 Version` | Version of the Delta4 software used to evaluate the run | `pre-1.00.0211`, `1.00.0211`, or `1.00.0220`
 `Tx Technique` | The technique used by the treatment plan | Tomo plans are all `IMRT` (intensity modulated radiation therapy). Elekta plans are `SBRT` (stereotactic body radiation therapy), `SRS` (stereotactic radiosurgery), or `VMAT` (volumetric modulated arc therapy).
 `Body Site` | The general anatomical region of the treatment plan | `Abdomen`, `Brain`, `Head and Neck`, `Pelvis`, or `Thorax`. `SBRT` is only for `Thorax` (lung), and `SRS` is only for `Brain`.
 `Scale Factor` | The factor by which the measured PSQA dose was scaled, rounded to four decimal places. The Tomo scale factor is the ratio of the latest measured TG-51 monthly dose rate, to the commissioning dose rate. The Elekta scale factor is the ratio of the daily DailyQA3 output measurement, to the expected measurement, according to SunCHECK Machine software. The scale factor is 1 for plans that were not rescaled; there is no way to differentiate between this type of plan and a plan for which the calculated scale factor is actually 1 (rare). | Non-negative number
 `Dose Threshold (%)` | The lower dose threshold for doses included in the dose analysis in the PSQA software. The upper dose threshold was kept constant at 500%. | Percentage between 0 and 100, inclusive
 `Temp Correction` | Whether or not a temperature correction was applied in the PSQA software. Near the beginning of data collection, the phantom was stored in a cool room at around 20&deg;C, and temperature was taken as the temperature of the room according to a thermocouple. Later, the phantom was moved to a more temperate room, and temperature was taken using a handheld thermometer placed on top of the phantom. | `TRUE` or `FALSE`
-`Dose Dev Criterion (%)` | The value (proportion of reference dose) above which a dose deviation is considered failing | Percentage between 0 and 100, inclusive
-`Dose Dev PR Initial (%)` | Dose deviation pass ratio before rescale or optimization | Percentage between 0 and 100, inclusive
-`Dose Dev PR Rescale (%)` | Dose deviation pass ratio after rescale (if applied) but before optimization | Percentage between 0 and 100, inclusive
-`Dose Dev PR Opt (%)` | Dose deviation pass ratio after rescale (if applied) and optimization | Percentage between 0 and 100, inclusive
-`DTA Criterion (mm)` | The value (mm) above which a distance to agreement (DTA) value is considered failing | Non-negative number
-`DTA PR Initial (%)` | DTA pass ratio before rescale or optimization | Percentage between 0 and 100, inclusive
-`DTA PR Rescale (%)` | DTA pass ratio after rescale (if applied) but before optimization | Percentage between 0 and 100, inclusive
-`DTA PR Opt (%)` | DTA pass ratio after rescale (if applied) and optimization | Percentage between 0 and 100, inclusive
-`Gamma PR Criterion (%)` | The gamma pass ratio below which a plan is considered failing. This is the tolerance level, not the action level. | Percentage between 0 and 100, inclusive
-`Gamma PR Initial (%)` | Gamma pass ratio before rescale or optimization | Percentage between 0 and 100, inclusive
-`Gamma PR Rescale (%)` | Gamma pass ratio after rescale (if applied) but before optimization | Percentage between 0 and 100, inclusive, or `PASS` or `FAIL`
-`Gamma PR Opt (%)` | Gamma pass ratio after rescale (if applied) and optimization | Percentage between 0 and 100, inclusive
+`Dose Dev Tol Level (%)` | The value (proportion of reference dose) above which a dose deviation is considered out of tolerance | Percentage between 0 and 100, inclusive
+`Dose Dev Action Level (%)` | The value (proportion of reference dose) above which a dose deviation is considered actionable | Percentage between 0 and 100, inclusive
+`Dose Dev W/I Tol - Initial (%)` | Proportion of dose deviations that are in tolerance before rescale or optimization | Percentage between 0 and 100, inclusive
+`Dose Dev W/I Tol - Rescale (%)` | Proportion of dose deviations that are in tolerance after rescale (if applied) but before optimization | Percentage between 0 and 100, inclusive
+`Dose Dev W/I Tol - Opt (%)` | Proportion of dose deviations that are in tolerance after rescale (if applied) and optimization | Percentage between 0 and 100, inclusive
+`DTA Tol Level (mm)` | The value (mm) above which a distance to agreement (DTA) value is considered out of tolerance | Non-negative number
+`DTA Action Level (mm)` | The value (mm) above which a distance to agreement (DTA) value is considered actionable | Non-negative number
+`DTA W/I Tol - Initial (%)` | Proportion of DTA values that are in tolerance before rescale or optimization | Percentage between 0 and 100, inclusive
+`DTA W/I Tol - Rescale (%)` | Proportion of DTA values that are in tolerance after rescale (if applied) but before optimization | Percentage between 0 and 100, inclusive
+`DTA W/I Tol - Opt (%)` | Proportion of DTA values that are in tolerance after rescale (if applied) and optimization | Percentage between 0 and 100, inclusive
+`Gamma PR Tol Level (%)` | The gamma pass ratio below which a plan is considered out of tolerance | Percentage between 0 and 100, inclusive
+`Gamma PR Action Level (%)` | The gamma pass ratio below which a plan is considered actionable | Percentage between 0 and 100, inclusive
+`Gamma PR - Initial (%)` | Gamma pass ratio before rescale or optimization | Percentage between 0 and 100, inclusive
+`Gamma PR - Rescale (%)` | Gamma pass ratio after rescale (if applied) but before optimization | Percentage between 0 and 100, inclusive, or `PASS` or `FAIL`
+`Gamma PR - Opt (%)` | Gamma pass ratio after rescale (if applied) and optimization | Percentage between 0 and 100, inclusive
 `Gamma Avg Initial` | Gamma average before rescale or optimization | Non-negative number
 `Gamma Avg Rescale` | Gamma average after rescale (if applied) but before optimization | Non-negative number
 `Gamma Avg Opt` | Gamma average after rescale (if applied) and optimization | Non-negative number
-`X Initial (mm)` | *x*-coordinate (mm) of the phantom before optimization | Number
-`X Opt (mm)` | *x*-coordinate (mm) of the phantom after optimization | Number
-`Y Initial (mm)` | *y*-coordinate (mm) of the phantom before optimization | Number
-`Y Opt (mm)` | *y*-coordinate (mm) of the phantom after optimization | Number
-`Z Initial (mm)` | *z*-coordinate (mm) of the phantom before optimization | Number
-`Z Opt (mm)` | *z*-coordinate (mm) of the phantom after optimization | Number
-`Rx (cGy)` | Prescription, in cGy | Positive integer
+`X - Initial (mm)` | *x*-coordinate (mm) of the phantom before optimization | Number
+`X - Opt (mm)` | *x*-coordinate (mm) of the phantom after optimization | Number
+`Y - Initial (mm)` | *y*-coordinate (mm) of the phantom before optimization | Number
+`Y - Opt (mm)` | *y*-coordinate (mm) of the phantom after optimization | Number
+`Z - Initial (mm)` | *z*-coordinate (mm) of the phantom before optimization | Number
+`Z - Opt (mm)` | *z*-coordinate (mm) of the phantom after optimization | Number
 
 The following fields only apply to plans failing even after phantom position optimization:
 Column | Description | Constraints
 --- | --- | ---
+`Rx (cGy)` | Prescription, in cGy | Positive integer
 `Max Gantry Spacing (mm)` | The maximum allowed gantry spacing set in the TPS. Does not apply to Tomo plans | `#N/A` for Tomo. Positive number for Elekta.
 `Dose Grid Res (mm)` | The resolution (mm) of the plan's uniform dose grid | Positive number
 `Beam Delivery Time (s)` | List of beam delivery times in the plan | Comma-separated list of non-negative numbers 
