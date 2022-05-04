@@ -1,4 +1,4 @@
-Attribute VB_Name = "Module1"
+Attribute VB_Name = "Module11"
 Option Explicit
 Public Function ValidateRegex(rngCell As Range, strPattern As String) As Boolean
     '*******************************************************************************
@@ -22,6 +22,13 @@ Public Function ValidateRegex(rngCell As Range, strPattern As String) As Boolean
     ValidateRegex = regEx.Test(rngCell.Value)
 End Function
 Public Function ValidateColor(rngCell As Range) As Boolean
+    '*******************************************************************************
+    'Purpose: Returns whether or not the value in the cell is a valid "(A, R, G, B)"
+    '         color
+    'Inputs:
+    '   - rngCell: Range containing a single cell whose value to check
+    'Outputs: True for a valid color, False otherwise
+    '*******************************************************************************
     Dim strColorComponentRegex As String: strColorComponentRegex = "(0|[1-9]\d?|1\d{2}|2[0-4]\d|25[0-5])"
     Dim strColorRegex As String: strColorRegex = "^\(" & strColorComponentRegex & ", " & strColorComponentRegex & ", " & strColorComponentRegex & ", " & strColorComponentRegex & "\)$"
     
