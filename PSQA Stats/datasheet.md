@@ -15,7 +15,7 @@ Each row in the "PSQAStats" table represents a run of a PSQA plan on a linac.
 ### **2.2**  How many instances are there in total (of each type, if appropriate)?
 At the time of compilation of this document, there are 248 instances.
 ### **2.3**  Does the dataset contain all possible instances or is it a sample (not necessarily random) of instances from a larger set? If the dataset is a sample, then what is the larger set? Is the sample representative of the larger set (e.g., geographic coverage)? If so, please describe how this representativeness was validated/verified. If it is not representative of the larger set, please describe why not (e.g., to cover a more diverse range of instances, because instances were withheld or unavailable).
-The dataset is a sample of PSQA plans run at CRMC over a certain time period. A run was excluded from the sample if (a) it was not run by Kaley, (b) Kaley neglected to record certain essential fields (e.g., gamma pass ratio) for the plan, or (c) Kaley realized after the fact that she had recorded the wrong values. As far as the authors know, fewer than 10 runs were excluded. No tests were run to determine representativeness.
+The dataset is a sample of PSQA plans run at CRMC over a certain time period. A run was excluded from the sample if (a) it was not run by Kaley, (b) Kaley neglected to record certain essential fields (e.g., gamma pass ratio) for the plan, (c) Kaley realized after the fact that she had recorded the wrong values, or (d) the paper on which the data were recorded was lost. As far as the authors know, fewer than 10 runs were excluded. No tests were run to determine representativeness.
 ### **2.4**  What data does each instance consist of? "Raw" data (e.g., unprocessed text or images) or features? In either case, please provide a description.
 The table consists of the following fields:
 Column | Description | Constraints
@@ -101,7 +101,7 @@ There was no sampling strategy.
 ### **3.4**  Who was involved in the data collection process (e.g., students, crowdworkers, contractors) and how were they compensated (e.g., how much were crowdworkers paid)?
 All data was collected by Kaley White as part of her role as a medical physics assistant.
 ### **3.5**  Over what timeframe was the data collected? Does this timeframe match the creation timeframe of the data associated with the instances (e.g., recent crawl of old news articles)? If not, please describe the timeframe in which the data associated with the instances was created.
-Data collection began on 5/7/21. At the time of the composition of this document, the last data point is from 3/2/22.
+Data collection began on 5/7/21.
 ### **3.6**  Were any ethical review processes conducted (e.g., by an institutional review board)? If so, please provide a description of these review processes, including the outcomes, as well as a link or other access point to any supporting documentation.
 No.
 ### **3.7**  Does the dataset relate to people? If not, you may skip the remainder of the questions in this section.
