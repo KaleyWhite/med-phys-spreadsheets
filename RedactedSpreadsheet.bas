@@ -122,8 +122,16 @@ Sub RedactedSpreadsheet()
             End If
             'Iterate over all columns in table
             For Each col In tbl.HeaderRowRange
-                colInList = colsList <> "" And Not IsError(Application.Match(col, colsArr, 0))
-                colInListPhEmail = colsListPhEmail <> "" And Not IsError(Application.Match(col, colsArrPhEmail, 0))
+                If colsList = "" Then
+                    colInList = False
+                Else
+                    colInList = Not IsError(Application.Match(col, colsArr, 0))
+                End If
+                If colsListPhEmail = "" Then
+                    colInListPhEmail = False
+                Else
+                    colInListPhEmail = Not IsError(Application.Match(col, colsArrPhEmail, 0))
+                End If
                 For i = 1 To Range(tbl.Name).Rows.Count
                     Set cell = Range(tbl.Name & "[" & col & "]")(i)
                     If colInList And cell.Value <> "" And (Left(cell.Value, 1) <> "<" Or Right(cell.Value, 1) <> ">") Then  'Cell is in column to redact, is nonempty, and is not enclosed in "<>"
