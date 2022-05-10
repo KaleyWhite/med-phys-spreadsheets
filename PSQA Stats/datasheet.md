@@ -21,10 +21,11 @@ The table consists of the following fields:
 Column | Description | Constraints
 --- | --- | ---
 `Date` | The date on which the plan was run on the linac | Today or a past date
+`D4 Version` | Version of the Delta4 software used to evaluate the run | `pre-1.00.0211`, `1.00.0211`, or `1.00.0220`
 `Machine` | The linac on which the plan was run | `Tomo` (a TomoTherapy Hi Art), `E1` (Synergy linac with Agility MLC), or `E2` (Infinity linac with Agility MLC)
+`Radiation Device` | The Radiation Device in the Delta4 software. Each Radiation Device has its own calibration. | `ELEKTA`, `E1`, or `E2`
 `Dose Type` | The type of dose that the DQA plan was shot for: the entire plan dose, or an individual beam dose in a multi-beam plan. Note that this document uses the terms _plan_ and _beam_ interchangeably to refer to a row in the table. | `Plan` or `Beam`
 `Dose Type Rescaled` | The dose that was rescaled. When a plan dose is rescaled, beam doses are unaffected and thus invalid for evaluating the DQA results. When beam doses are rescaled, the plan dose is recalculated as the sum of the rescaled beam doses. | For plan doses, `Plan` or `Beam`. For beam doses, `Beam`.
-`D4 Version` | Version of the Delta4 software used to evaluate the run | `pre-1.00.0211`, `1.00.0211`, or `1.00.0220`
 `Tx Technique` | The technique used by the treatment plan | Tomo plans are all `IMRT` (intensity modulated radiation therapy). Elekta plans are `SBRT` (stereotactic body radiation therapy), `SRS` (stereotactic radiosurgery), or `VMAT` (volumetric modulated arc therapy).
 `Body Site` | The general anatomical region of the treatment plan | `Abdomen`, `Brain`, `Head and Neck`, `Pelvis`, or `Thorax`. `SBRT` is only for `Thorax` (lung), and `SRS` is only for `Brain`.
 `Scale Factor` | The factor by which the measured PSQA dose was scaled, rounded to four decimal places. The Tomo scale factor is the ratio of the latest measured TG-51 monthly dose rate, to the commissioning dose rate. The Elekta scale factor is the ratio of the daily DailyQA3 output measurement, to the expected measurement, according to SunCHECK Machine software. The scale factor is 1 for plans that were not rescaled; there is no way to differentiate between this type of plan and a plan for which the calculated scale factor is actually 1 (rare). | Non-negative number
